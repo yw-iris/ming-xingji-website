@@ -891,7 +891,7 @@
   function vh(){ return window.innerHeight; }
   function centerVP(){ return {x: vw()*0.50, y: vh()*0.46, s: Math.min(vw()*0.34, 196), r: 0}; }
   function cornerVP(){
-    // 手机端：星星落在封面 “MING” 中 N 的左上角
+    // 开场落点：手机端星星落在封面 “MING” 中 N 的左上角；桌面端在页面左上角
     if (window.innerWidth <= 520){
       const n = document.getElementById('nChar');
       if (n){
@@ -901,12 +901,25 @@
     }
     return {x: vw()*0.105, y: vh()*0.072, s: 30, r: 0};
   }
+  // 里页里星星的停靠点：始终在页面左上角
+  function pageCornerVP(){ return {x: vw()*0.105, y: vh()*0.072, s: 30, r: 0}; }
   function leftmidVP(){ return {x: vw()*0.24, y: vh()*0.42, s: Math.min(vw()*0.16, 92), r: 0}; }
 
   function setStar(p){
     star.style.left = p.x+'px'; star.style.top = p.y+'px';
     star.style.width = p.s+'px';
     star.style.transform = `translate(-50%,-50%) rotate(${p.r}deg)`;
+  }
+  // 进入里页后：把星星从开场落点平滑移到页面左上角
+  function moveStarToPageCorner(){
+    if (star.getAnimations) star.getAnimations().forEach(x=>x.cancel());
+    const t = pageCornerVP();
+    const cur = {x: parseFloat(star.style.left)||t.x, y: parseFloat(star.style.top)||t.y, s: parseFloat(star.style.width)||t.s};
+    const a = star.animate([
+      {left:cur.x+'px', top:cur.y+'px', width:cur.s+'px', transform:'translate(-50%,-50%) rotate(0deg)'},
+      {left:t.x+'px',   top:t.y+'px',   width:t.s+'px',   transform:'translate(-50%,-50%) rotate(0deg)'}
+    ], {duration:480, easing:'cubic-bezier(.4,0,.2,1)', fill:'forwards'});
+    a.onfinish = () => { a.cancel(); setStar(t); };
   }
 
   function loop(now){
@@ -938,6 +951,7 @@
     pageInd.classList.add('show');
     nextBar.classList.add('show');
     star.classList.add('hit');
+    moveStarToPageCorner();    // 里页里星星回到页面左上角
     // 翻页按钮状态
     if (i===0){
       prevBtn.hidden = false; prevBtn.textContent = '← 返回开场';
@@ -966,7 +980,7 @@
 
   function startOutro(){
     phase='flyout'; t0=performance.now();
-    from = cornerVP(); to = leftmidVP();
+    from = pageCornerVP(); to = leftmidVP();
     nextBar.classList.remove('show');
     pageInd.classList.remove('show');
     document.querySelectorAll('.page').forEach(p=>p.classList.remove('on'));
