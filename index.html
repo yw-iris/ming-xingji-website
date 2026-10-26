@@ -305,6 +305,10 @@
   }
   .sc-post-head b{font-size:13.5px; display:block; letter-spacing:.06em}
   .sc-post-head small{font-size:11px; color:var(--faint)}
+  /* 帖子卡：四个圈全部点亮后才出现 */
+  .sc-post.sc-hide{display:none}
+  .sc-post.reveal{animation:scIn .65s cubic-bezier(.22,.8,.36,1) both}
+  @keyframes scIn{from{opacity:0; transform:translateY(16px)} to{opacity:1; transform:none}}
   .sc-more{
     margin-left:auto; width:28px;height:28px;border-radius:50%;
     background:var(--ink); color:#fff; display:flex; align-items:center; justify-content:center;
@@ -630,7 +634,7 @@
             <div class="story"><span class="ring">钓</span><i>年上钓系</i></div>
             <div class="story"><span class="ring">撩</span><i>微擦调情</i></div>
           </div>
-          <div class="sc-post">
+          <div class="sc-post sc-hide">
             <div class="sc-post-head">
               <span class="ava">茗</span>
               <span><b>MING</b><small>2h ago · 虚恋单已开</small></span>
@@ -1018,6 +1022,11 @@
         if (!rings.some(r => !r.classList.contains('on'))){
           addBtn.classList.add('gone');
           addBtn.closest('.story').classList.add('add-gone');   // 整项收起，后面圈滑上来
+          // 帖子卡等收起动画结束后淡入出现
+          const post = document.querySelector('#page1 .sc-post');
+          if (post){
+            setTimeout(() => { post.classList.remove('sc-hide'); post.classList.add('reveal'); }, 550);
+          }
         }
       }
     });
