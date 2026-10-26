@@ -3,16 +3,30 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
-<title>茗 · ENTELECHEIA</title>
+<title>茗 · 星迹 — ENTELECHEIA</title>
 <style>
+  :root{
+    --bg:#f4f2ec;          /* 暖白纸感 */
+    --card:#fffdf8;        /* 卡片略亮 */
+    --ink:#181712;         /* 近黑暖墨 */
+    --muted:rgba(24,23,18,.5);
+    --faint:rgba(24,23,18,.32);
+    --line:rgba(24,23,18,.14);
+    --line-2:rgba(24,23,18,.26);
+    --serif:"Songti SC","Noto Serif SC","STSong",serif;
+    --sans:-apple-system,BlinkMacSystemFont,"PingFang SC","Noto Sans SC",sans-serif;
+    --mono:"Courier New",ui-monospace,monospace;
+  }
   *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent}
   html,body{height:100%}
   body{
-    background:#0b0b0b; color:#fff; overflow:hidden;
-    font-family:"Songti SC","Noto Serif SC","STSong",serif;
+    background:var(--bg); color:var(--ink); overflow:hidden;
+    font-family:var(--sans);
     -webkit-user-select:none; user-select:none;
+    -webkit-font-smoothing:antialiased;
   }
-  .mono{font-family:"Courier New",ui-monospace,monospace}
+  .mono{font-family:var(--mono)}
+  .serif{font-family:var(--serif)}
 
   /* ================= 贯穿全场的主角星 ================= */
   #star{
@@ -20,7 +34,7 @@
     will-change:transform,width;
   }
   #star img{width:100%; display:block;
-    filter:drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 4px rgba(255,255,255,.75)) drop-shadow(0 0 12px rgba(255,255,255,.35));}
+    filter:drop-shadow(0 2px 5px rgba(0,0,0,.16));}
   #star.hit{pointer-events:auto; cursor:pointer}
 
   /* ================= 开场：三联舞台 ================= */
@@ -31,211 +45,171 @@
   #intro.off{opacity:0; pointer-events:none}
   .stage{
     position:relative;
-    width:min(88vw, calc(88svh * 0.7323));
-    height:min(calc(88vw / 0.7323), 88svh);
-    box-shadow:0 0 90px rgba(255,255,255,.08), 0 0 8px rgba(255,255,255,.18);
-    overflow:hidden; background:#fff;
+    width:min(82vw, calc(82svh * 0.7323));
+    height:min(calc(82vw / 0.7323), 82svh);
+    background:#fff;
+    border:1px solid var(--line);
+    box-shadow:0 24px 70px rgba(24,23,18,.10);
+    overflow:hidden;
   }
   .layer{position:absolute; inset:0; opacity:0}
   .layer img{width:100%; height:100%; object-fit:cover; display:block}
   .caption{
     position:fixed; left:50%; bottom:calc(4svh); transform:translateX(-50%);
-    letter-spacing:.5em; text-indent:.5em; font-size:12px; color:rgba(255,255,255,.75);
+    letter-spacing:.55em; text-indent:.55em; font-size:11px; color:var(--muted);
     white-space:nowrap; transition:opacity .6s ease;
   }
   .dots{
     position:fixed; left:50%; transform:translateX(-50%); top:calc(3.2svh);
     display:flex; gap:16px; align-items:center;
   }
-  .dot{width:8px;height:8px;transform:rotate(45deg);border:1px solid rgba(255,255,255,.6);background:transparent;transition:all .4s ease}
-  .dot.on{background:#fff}
+  .dot{width:7px;height:7px;transform:rotate(45deg);border:1px solid var(--faint);background:transparent;transition:all .4s ease}
+  .dot.on{background:var(--ink); border-color:var(--ink)}
   .skip-hint{
-    position:fixed; right:20px; bottom:calc(4svh); font-size:11px;
-    letter-spacing:.25em; color:rgba(255,255,255,.35);
+    position:fixed; right:20px; top:calc(3svh); font-size:10px;
+    letter-spacing:.25em; color:var(--faint);
   }
 
   /* ================= 详情页 ================= */
   .page{
     position:fixed; inset:0; overflow-y:auto; overflow-x:hidden;
     opacity:0; visibility:hidden; transition:opacity .8s ease;
-    background:#0b0b0b; z-index:20; padding:86px 0 120px;
+    background:var(--bg); z-index:20; padding:84px 0 116px;
     -webkit-overflow-scrolling:touch;
   }
   .page.on{opacity:1; visibility:visible}
-  .wrap{max-width:430px; margin:0 auto; padding:0 18px}
+  .wrap{max-width:470px; margin:0 auto; padding:0 26px}
 
   /* 页头 */
-  .p-head{display:flex; align-items:baseline; justify-content:space-between; margin-bottom:4px}
-  .p-head h1{font-size:26px; letter-spacing:.12em; font-weight:600}
-  .p-head .en{font-size:11px; letter-spacing:.3em; color:rgba(255,255,255,.5)}
-  .p-sub{font-size:12px; color:rgba(255,255,255,.45); letter-spacing:.15em; margin-bottom:22px}
-
-  /* 通用卡片 */
-  .card{
-    background:#fff; color:#111; border:2px solid #000;
-    border-radius:20px; box-shadow:5px 6px 0 rgba(0,0,0,.85);
-    overflow:hidden; margin-bottom:18px;
+  .p-head{margin-bottom:6px}
+  .kicker{font-size:10px; letter-spacing:.4em; color:var(--muted); text-transform:uppercase; margin-bottom:14px}
+  .p-head h1{
+    font-family:var(--serif); font-weight:500;
+    font-size:clamp(34px,12vw,46px); letter-spacing:.14em; line-height:1.05;
   }
-  .card-bar{
-    display:flex; align-items:center; gap:8px;
-    background:#111; color:#fff; padding:9px 14px;
-    font-size:12px; letter-spacing:.18em;
+  .p-sub{margin-top:14px; font-size:11px; letter-spacing:.18em; color:var(--faint); line-height:1.8}
+
+  /* 通用区块 */
+  .block{margin-top:42px}
+  .lbl{
+    font-family:var(--mono); font-size:10px; letter-spacing:.32em;
+    color:var(--muted); text-transform:uppercase;
+    display:flex; align-items:center; gap:10px; margin-bottom:16px;
   }
-  .card-bar .x{margin-left:auto; letter-spacing:.1em}
-  .card-body{padding:14px 16px}
+  .lbl::after{content:""; flex:1; height:1px; background:var(--line)}
 
-  /* Stories 行（参考图1） */
-  .stories{background:#fff;color:#111;border:2px solid #000;border-radius:24px;box-shadow:5px 6px 0 rgba(0,0,0,.85);padding:16px 16px 14px;margin-bottom:18px}
-  .stories .s-head{display:flex;justify-content:space-between;align-items:baseline;margin-bottom:14px}
-  .stories .s-head b{font-size:19px;letter-spacing:.04em}
-  .stories .s-head span{font-size:12px;color:#666}
-  .s-row{display:flex;gap:14px;overflow-x:auto;padding-bottom:4px}
-  .s-item{display:flex;flex-direction:column;align-items:center;gap:7px;min-width:56px}
-  .ava{
-    width:52px;height:52px;border-radius:50%;background:#000;color:#fff;
-    display:flex;align-items:center;justify-content:center;font-size:17px;flex-shrink:0;
+  /* 引言 */
+  .lede{
+    font-family:var(--serif); font-size:16px; line-height:2.1;
+    letter-spacing:.04em; color:var(--ink); margin-top:24px;
   }
-  .ava.ring{background:#fff;color:#000;border:3px solid #000;box-shadow:0 0 0 3px #fff,0 0 0 5px #000}
-  .ava.plus{font-size:26px}
-  .s-item label{font-size:10.5px;color:#333;letter-spacing:.05em;white-space:nowrap}
 
-  /* 黑色照片卡（名言） */
-  .quote-card{
-    position:relative; background:#000; color:#fff; border:2px solid #000;
-    border-radius:20px; box-shadow:5px 6px 0 rgba(0,0,0,.85);
-    padding:26px 22px 20px; margin-bottom:18px; overflow:hidden;
+  /* Stories 圆环行 */
+  .story-row{display:flex; gap:20px; overflow-x:auto; padding-bottom:6px; scrollbar-width:none}
+  .story-row::-webkit-scrollbar{display:none}
+  .story{display:flex; flex-direction:column; align-items:center; gap:9px; min-width:54px}
+  .ring{
+    width:50px;height:50px;border-radius:50%;
+    border:1px solid var(--ink); color:var(--ink);
+    display:flex;align-items:center;justify-content:center;
+    font-family:var(--serif); font-size:18px; background:var(--card);
+    flex-shrink:0;
   }
-  .quote-card .big-star{position:absolute; right:-30px; top:-34px; width:150px; opacity:.2; transform:rotate(18deg); filter:invert(1)}
-  .quote-card p{font-size:16.5px; line-height:2; letter-spacing:.06em}
-  .quote-card .from{margin-top:14px; font-size:12px; color:rgba(255,255,255,.55); text-align:right; letter-spacing:.25em}
-  .quote-card .tags{margin-top:14px; font-size:11px; letter-spacing:.2em; color:rgba(255,255,255,.4); border-top:1px solid rgba(255,255,255,.15); padding-top:12px}
+  .ring.plus{font-size:24px; color:var(--faint); border-color:var(--line-2)}
+  .story i{font-style:normal; font-size:10.5px; color:var(--muted); letter-spacing:.06em; white-space:nowrap}
 
-  /* NEW CHAT 气泡（参考图3左） */
-  .chat{border:2px solid #000;border-radius:20px;box-shadow:5px 6px 0 rgba(0,0,0,.85);background:#fff;color:#111;position:relative;margin-bottom:18px}
-  .chat-top{display:flex;align-items:center;gap:10px;padding:12px 16px;border-bottom:1.5px solid #000}
-  .chat-top .ico{width:26px;height:22px;background:#000;border-radius:5px;position:relative}
-  .chat-top .ico::after{content:"";position:absolute;left:5px;top:4px;width:12px;height:2px;background:#fff;box-shadow:0 5px 0 #fff,0 10px 0 #fff}
-  .chat-top b{font-size:14px;letter-spacing:.2em}
-  .chat-top .now{margin-left:auto;font-size:12px;color:#777}
-  .chat-main{display:flex;gap:14px;padding:16px}
-  .clover{width:52px;height:52px;flex-shrink:0;background:#000;border-radius:50%;display:flex;align-items:center;justify-content:center;color:#fff;font-size:24px}
-  .chat-main h3{font-size:14px;letter-spacing:.15em;margin-bottom:6px}
-  .chat-main p{font-size:14.5px;line-height:1.8;color:#222}
-  .chat-main .spark{margin-left:auto;color:#000;font-size:18px;align-self:flex-start}
-  .chat-tail{position:absolute;left:34px;bottom:-14px;width:0;height:0;border:14px solid transparent;border-top:16px solid #000;filter:drop-shadow(0 3px 0 rgba(0,0,0,.85))}
-
-  /* DISK INFO 窗口（参考图3右） */
-  .disk-body{display:flex;gap:14px;padding:14px 16px}
-  .disk-l{display:flex;flex-direction:column;align-items:center;gap:10px;flex-shrink:0}
-  .floppy{width:58px;height:58px;border:2.5px solid #000;border-radius:6px;position:relative;background:#fff}
-  .floppy::before{content:"";position:absolute;top:6px;left:50%;transform:translateX(-50%);width:22px;height:14px;border:2px solid #000;border-radius:2px}
-  .floppy::after{content:"";position:absolute;bottom:0;left:8px;right:8px;height:20px;background:#000}
-  .disk-l span{font-size:10px;letter-spacing:.15em;color:#555}
-  .disk-r{flex:1;font-size:12px;line-height:2.05;letter-spacing:.05em;min-width:0}
-  .disk-r b{display:inline-block;width:64px;color:#000}
-  .bar{height:10px;border:1.5px solid #000;border-radius:99px;margin-top:6px;overflow:hidden}
-  .bar i{display:block;height:100%;width:100%;background:#000}
-  .disk-foot{border-top:1.5px solid #000;padding:9px 16px;font-size:11.5px;letter-spacing:.12em;display:flex;justify-content:space-between;color:#333}
-
-  /* 须知列表 */
-  .list{font-size:13px;line-height:1.95;color:#222;padding:2px 0}
-  .list li{list-style:none;padding-left:20px;position:relative}
-  .list li::before{content:"✦";position:absolute;left:0;top:0;font-size:10px}
-
-  /* FM 收音机（参考图4右上） */
-  .fm{background:#fff;border:2px solid #000;border-radius:16px;box-shadow:5px 6px 0 rgba(0,0,0,.85);overflow:hidden;margin-bottom:18px}
-  .fm-in{border:2px solid #000;border-radius:10px;margin:6px;background:#111;color:#fff;padding:10px 14px}
-  .fm-row{display:flex;align-items:center;justify-content:space-between;font-size:12px;letter-spacing:.2em}
-  .fm-row .st{font-size:9px;border:1px solid #fff;border-radius:3px;padding:1px 4px;letter-spacing:.15em}
-  .dial{position:relative;height:34px;margin-top:8px}
-  .dial .ticks{position:absolute;inset:0;display:flex;justify-content:space-between;align-items:flex-end}
-  .dial .ticks i{width:1px;background:rgba(255,255,255,.55);height:8px}
-  .dial .ticks i:nth-child(5n+1){height:14px;background:#fff}
-  .dial .needle{position:absolute;left:64%;top:0;bottom:0;width:2px;background:#fff;box-shadow:0 0 6px #fff}
-  .dial .needle::after{content:"";position:absolute;top:-4px;left:-3px;width:8px;height:8px;background:#fff;border-radius:50%}
-  .fm-freq{display:flex;justify-content:space-between;font-size:10px;color:rgba(255,255,255,.6);margin-top:4px;letter-spacing:.05em}
-  .fm-word{margin-top:9px;text-align:center;font-size:13.5px;letter-spacing:.35em;text-indent:.35em}
-
-  /* LYRICS.EXE 气泡（参考图4） */
-  .lyrics{background:#fff;border:2.5px solid #000;border-radius:22px;box-shadow:5px 6px 0 rgba(0,0,0,.85);padding:14px 18px 20px;position:relative;margin-bottom:18px;color:#111}
-  .lyr-top{display:flex;align-items:center;gap:10px;border-bottom:1.5px solid #000;padding-bottom:9px;margin-bottom:12px;font-size:13px;letter-spacing:.2em}
-  .lyr-top .win{margin-left:auto;letter-spacing:.25em;color:#444}
-  .lyrics p{font-size:14.5px;line-height:1.95}
-  .eq{display:flex;align-items:flex-end;gap:3px;height:26px;margin-top:10px;justify-content:flex-end}
-  .eq i{width:5px;background:#000;animation:eq 1.1s ease-in-out infinite}
-  @keyframes eq{0%,100%{height:30%}50%{height:100%}}
-  .lyrics::after{content:"";position:absolute;right:44px;bottom:-16px;border:16px solid transparent;border-top:18px solid #000}
-
-  /* CD 档案卡（参考图2右） */
-  .cd{background:#fff;border:2px solid #000;border-radius:18px;box-shadow:5px 6px 0 rgba(0,0,0,.85);overflow:hidden;margin-bottom:18px;color:#111}
-  .cd-in{display:flex;gap:0}
-  .cd-left{flex:1.15;padding:14px 14px 12px;border-right:2px dashed #000;min-width:0}
-  .cd-tag{display:inline-block;background:#111;color:#fff;font-size:9.5px;letter-spacing:.2em;padding:3px 8px;border-radius:3px;margin-bottom:9px}
-  .cd-left h3{font-size:17px;letter-spacing:.14em;margin-bottom:2px}
-  .cd-left .yr{font-size:11px;color:#666;letter-spacing:.2em;margin-bottom:10px}
-  .cd-left ol{font-size:11.5px;line-height:2.05;letter-spacing:.06em;color:#222}
-  .cd-left ol li{list-style:none;display:flex;gap:8px;white-space:nowrap}
-  .cd-left ol li b{color:#999;font-weight:400}
-  .barcode{height:22px;margin-top:10px;background:repeating-linear-gradient(90deg,#000 0 2px,#fff 2px 4px,#000 4px 7px,#fff 7px 9px)}
-  .cd-right{flex:1;position:relative;display:flex;align-items:center;justify-content:center;background:radial-gradient(circle at 50% 50%,#eee 0 12%,#111 12.5% 14%,#ddd 14.5% 100%);min-height:150px}
-  .disc{width:76%;aspect-ratio:1;border-radius:50%;background:conic-gradient(#000,#444,#000,#666,#000,#333,#000);position:relative;border:2px solid #000}
-  .disc::after{content:"DA";position:absolute;inset:0;margin:auto;width:36%;height:36%;background:#fff;border:2px solid #000;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:12px;letter-spacing:.1em}
-
-  /* Spending 风格卡（参考图2左）→ 须知 */
-  .notice{background:#fff;border:2px solid #000;border-radius:18px;box-shadow:5px 6px 0 rgba(0,0,0,.85);padding:15px 16px;margin-bottom:18px;color:#111}
-  .notice .n-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:8px}
-  .notice .n-head b{font-size:14px;letter-spacing:.15em}
-  .notice .n-head span{font-size:11px;color:#888}
-  .notice h4{font-size:24px;letter-spacing:.05em;margin:2px 0 10px}
-  .notice h4 small{font-size:12px;color:#888;letter-spacing:.15em}
+  /* 引言卡（名言） */
+  .quote{
+    border:1px solid var(--line); border-radius:18px; background:var(--card);
+    padding:34px 28px; margin-top:42px;
+    font-family:var(--serif); font-size:19px; line-height:2.15; letter-spacing:.05em;
+    text-align:center;
+  }
+  .quote cite{display:block; margin-top:20px; font-style:normal; font-size:12px; letter-spacing:.3em; color:var(--muted)}
 
   /* 板评便签 */
-  .note{background:#fff;border:2px solid #000;border-radius:18px;box-shadow:5px 6px 0 rgba(0,0,0,.85);padding:15px 16px;margin-bottom:18px;color:#111;position:relative}
-  .note::before{content:"BOARD REVIEW";position:absolute;right:14px;top:13px;font-size:9px;letter-spacing:.25em;color:#aaa}
-  .note h5{font-size:12px;letter-spacing:.2em;color:#666;margin-bottom:8px}
-  .note p{font-size:14px;line-height:1.9}
+  .note{
+    border:1px solid var(--line); border-radius:18px; background:var(--card);
+    padding:24px 26px; font-size:14.5px; line-height:2; letter-spacing:.03em; color:var(--ink);
+  }
+
+  /* 须知列表 */
+  .rules{list-style:none; margin-top:2px}
+  .rules li{
+    position:relative; padding:14px 0 14px 22px;
+    border-top:1px solid var(--line);
+    font-size:14px; line-height:1.95; letter-spacing:.02em; color:var(--ink);
+  }
+  .rules li:first-child{border-top:none}
+  .rules li::before{content:"✦"; position:absolute; left:0; top:15px; font-size:9px; color:var(--faint)}
+
+  /* 档案编号列表（病恋） */
+  .archive{list-style:none; margin-top:2px}
+  .archive li{
+    display:flex; gap:16px; align-items:baseline;
+    padding:13px 0; border-top:1px solid var(--line);
+    font-size:14.5px; letter-spacing:.06em;
+  }
+  .archive li:first-child{border-top:none}
+  .archive li b{font-family:var(--mono); font-weight:400; font-size:12px; color:var(--faint); min-width:26px}
+
+  /* 歌词块 */
+  .lyric{
+    border:1px solid var(--line); border-radius:18px; background:var(--card);
+    padding:28px 26px; margin-top:42px;
+    font-family:var(--serif); font-size:18px; line-height:2.1; letter-spacing:.06em; text-align:center;
+  }
 
   /* 标签胶囊 */
-  .chips{display:flex;flex-wrap:wrap;gap:8px;margin:2px 0 18px}
-  .chip{border:1.5px solid rgba(255,255,255,.7);border-radius:99px;padding:5px 13px;font-size:11.5px;letter-spacing:.12em;color:rgba(255,255,255,.85)}
+  .tags{margin-top:38px; display:flex; flex-wrap:wrap; gap:9px}
+  .tags span{
+    border:1px solid var(--line-2); border-radius:99px;
+    padding:7px 15px; font-size:12px; letter-spacing:.12em; color:var(--ink);
+  }
 
   /* 底部翻页条 */
   .next-bar{
     position:fixed;left:0;right:0;bottom:0;z-index:40;
-    padding:12px 18px calc(14px + env(safe-area-inset-bottom));
-    background:linear-gradient(transparent,#0b0b0b 38%);
+    padding:14px 18px calc(16px + env(safe-area-inset-bottom));
+    background:linear-gradient(transparent, var(--bg) 42%);
     display:flex;justify-content:center; opacity:0; visibility:hidden; transition:opacity .6s ease;
   }
   .next-bar.show{opacity:1;visibility:visible}
   .next-btn{
-    background:#fff;color:#000;border:2px solid #fff;border-radius:99px;
-    padding:12px 34px;font-size:13px;letter-spacing:.3em;text-indent:.3em;
-    font-family:inherit;cursor:pointer;box-shadow:0 0 24px rgba(255,255,255,.25);
+    background:var(--ink);color:var(--bg);border:none;border-radius:99px;
+    padding:13px 38px; font-size:12px; letter-spacing:.32em; text-indent:.32em;
+    font-family:var(--mono); cursor:pointer;
+    transition:transform .2s ease, opacity .2s ease;
   }
-  .next-btn:active{transform:scale(.96)}
+  .next-btn:active{transform:scale(.96); opacity:.85}
   .page-ind{
-    position:fixed;left:16vw;top:7.2vh;z-index:60;font-size:10px;letter-spacing:.3em;
-    color:rgba(255,255,255,.55);opacity:0;transition:opacity .8s ease .4s;
+    position:fixed;left:17.5vw;top:6.6vh;z-index:60;
+    font-family:var(--mono); font-size:10px; letter-spacing:.3em;
+    color:var(--muted); opacity:0; transition:opacity .8s ease .4s;
   }
   .page-ind.show{opacity:1}
 
   /* ================= 结尾（星星·左中） ================= */
   #outro{
-    position:fixed;inset:0;z-index:30;display:flex;align-items:center;
+    position:fixed;inset:0;z-index:30;display:flex; align-items:center;
     opacity:0;visibility:hidden;transition:opacity 1.2s ease;
   }
   #outro.on{opacity:1;visibility:visible}
-  .outro-in{padding-left:38vw;max-width:430px}
-  .outro-in h2{font-size:24px;letter-spacing:.35em;line-height:2;font-weight:500}
-  .outro-in .sig{margin-top:18px;font-size:13px;letter-spacing:.4em;color:rgba(255,255,255,.6)}
-  .outro-in .sig2{margin-top:6px;font-size:11px;letter-spacing:.3em;color:rgba(255,255,255,.35)}
+  .outro-in{padding-left:34vw; max-width:480px; padding-right:26px}
+  .outro-in h2{
+    font-family:var(--serif); font-weight:500;
+    font-size:clamp(26px,8vw,34px); letter-spacing:.3em; line-height:2;
+  }
+  .outro-in .sig{margin-top:22px; font-size:12px; letter-spacing:.4em; color:var(--muted)}
+  .outro-in .sig2{margin-top:8px; font-size:10px; letter-spacing:.28em; color:var(--faint)}
   #replay{
-    margin-top:34px;background:none;border:1.5px solid rgba(255,255,255,.5);color:rgba(255,255,255,.85);
-    font:inherit;font-size:12px;letter-spacing:.35em;text-indent:.35em;padding:10px 26px;border-radius:99px;cursor:pointer;
-    opacity:0;transition:opacity .8s ease .8s, all .3s ease;
+    margin-top:38px; background:none; border:1px solid var(--line-2); color:var(--ink);
+    font-family:var(--mono); font-size:11px; letter-spacing:.34em; text-indent:.34em;
+    padding:11px 28px; border-radius:99px; cursor:pointer;
+    opacity:0; transition:opacity .8s ease .8s, background .3s ease, color .3s ease;
   }
   #outro.on #replay{opacity:1}
-  #replay:hover{background:#fff;color:#000}
+  #replay:hover{background:var(--ink); color:var(--bg)}
 </style>
 </head>
 <body>
@@ -262,71 +236,48 @@
   <!-- 详情页 1 · 虚恋 -->
   <section class="page" id="page1">
     <div class="wrap">
-      <div class="p-head"><h1>茗 · 虚恋</h1><span class="en mono">XU LIAN — 01</span></div>
-      <div class="p-sub mono">渴望被爱 / 渴望融入 / 渴望认同 &nbsp;·&nbsp; 男 · 21 · 处女座 · 不接男板/单口/死物</div>
+      <div class="kicker mono">ENTELECHEIA · 茗</div>
+      <div class="p-head"><h1 class="serif">虚 恋</h1></div>
+      <div class="p-sub mono">XU LIAN — 01 / 02 &nbsp;·&nbsp; 男 · 21 · 处女座 · 不接男板 / 单口 / 死物</div>
 
-      <!-- Stories 行 -->
-      <div class="stories">
-        <div class="s-head"><b>Stories</b><span class="mono">See all</span></div>
-        <div class="s-row">
-          <div class="s-item"><div class="ava plus">+</div><label>点单入口</label></div>
-          <div class="s-item"><div class="ava ring">趣</div><label>恶趣味</label></div>
-          <div class="s-item"><div class="ava ring">引</div><label>引导型恋人</label></div>
-          <div class="s-item"><div class="ava ring">钓</div><label>年上钓系</label></div>
-          <div class="s-item"><div class="ava ring">撩</div><label>微擦调情</label></div>
+      <p class="lede">渴望被爱，渴望融入，渴望认同。<br>循序渐进的拉扯里，藏着唯一的恋感。</p>
+
+      <div class="block">
+        <div class="lbl mono">STORIES</div>
+        <div class="story-row">
+          <div class="story"><span class="ring plus">+</span><i>点单入口</i></div>
+          <div class="story"><span class="ring">趣</span><i>恶趣味</i></div>
+          <div class="story"><span class="ring">引</span><i>引导型恋人</i></div>
+          <div class="story"><span class="ring">钓</span><i>年上钓系</i></div>
+          <div class="story"><span class="ring">撩</span><i>微擦调情</i></div>
         </div>
       </div>
 
-      <!-- 名言黑卡 -->
-      <div class="quote-card">
-        <img class="big-star" src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAZQAAAIsCAYAAADVtF8lAAAQjUlEQVR4nO3d0ZLbNhJAUTiV//9l58HjWNaQEkk1CKD7nKqtZF9SGhLAFUCO3RoAq/g5+gO88s/oDwDAIT+f/jkdQQGY37QReSQoAGv5MfoD7BEUgLktsTtpTVAACCIoAIQQFIB5LXPc1ZqgAKxk2gfyrQkKAEEEBWBOSx13tSYoADNaLiatCQoAQQQFYA1TP5BvTVAAZrPkcVdrggKwgul3J60JCgBBBAVgHssed7UmKAAEERSAuS3x/KQ1QQGYxdLHXa0JCgBBBAWAEIICMN7ecdcyz09aExQAgggKACEEBWCs5d/u+k1QAMZ5FZOlnp+0JigABBEUAEIICgAhBAVgjFTPT1oTFACCCArA/dK8KvxIUAAIISgAc1ny+UlrggJwt5THXa0JCsCd0sakNUEBIIigABBCUADuceS4a9kH8q0JCgBBBAWAEIIC0F/6467WBAWAIIICQAhBAegr9S8zPhIUgH7KxKQ1QQGYwfIP5FsTFACCCApAH6WOu1oTFACCCApAvHK7k9YEBWC0FA/kWxMUAIIICkCsM8ddaXYnrQkKAEEEBSBOyYfxvwkKACEEBYAQggIQo/RxV2uCAjBKqje8WhMUAIIICsDnyh93tSYoACOkO+5qTVAACCIoAJ9x3PVFUACuE5MHggJACEEBIISgAFzjuOuJoACc90lMUr4y3JqgABBEUAAIISgA5zju2iEoAMd5EP+CoAAQQlAACCEoAIQQFIBjPn1+kvqBfGuCAkAQQQF4z9tdBwgKACEEBaC/9M9PWhMUgHccdx0kKACEEBSAfXYnJwgKACEEBaCvEg/kWxMUgD2Ou04SFABCCArAd3YnFwgKACEEBaCfMg/kWxMUgGeOuy4SFIA/xOQDggJACEEBIISgAPwSfdxV6oF8a4IC0JpnJyEEBYAQggJACEEBqutx3FXu+UlrggLU5tlJIEEBIISgABBCUICqHHcFExQAQggKUJHdSQeCAhCr5CvDrQkKAEEEBajGcVcnggJUIiYdCQpAnLLPT1oTFACCCApQheOuzgQFgBCCAlRgd3IDQQGyE5ObCAoAIQQFIEbpV4ZbExQgN8ddNxIUICsxuZmgABBCUAAIIShARncfd5V/IN+aoAAQRFCAbDyMH0RQgEzEZCBBASCEoAAQQlCALBx3DSYoQAYjY+KV4S+CAkAIQQEghKAAq/PsZBKCAqxMTCYiKACEEBRgVTPsTrzh9UBQgBXNEBOeCAoAIQQFgBCCAqzGcdekBAVYiZhMTFAACCEoANd4ZfiJoACrcNw1OUEBViAmCxAUAEIICjA7u5NFCAowMzFZiKAAEEJQgFnZnSxGUIAZicmCBAXgPL/UuEFQAAghKMBsHHctSlCAmYjJwgQFmIWYLE5QAAghKMAM7E4SEBRgNDFJQlAACCEowEh2J4kICjDKqjHxW/I7BAWAEIICjLDq7oQXBAWAEIIC3M3uJClBAe4kJokJCnAXMUlOUIA7iEkBggL0JiZFCAoAIQQF6MnupBBBAXoRk2IEBehBTAoSFABCCAoQze6kKEEBIolJYYICRBGT4gQFiCAmCArwMTGhtSYowGfEhP8JCnCVmPAXQQGuEBO+ERTgLDFhk6AAZ4gJuwQFOEpMeOnf9vcg+THqgwBTExPe+vfp/+8NGqGBusSEQ44eef1sBhVUZN5z2OPO48rAsXOBvMRkm3Vvx/OF+WQAuciQh5jss9bteHVhxAVqEpPXrG873l2YqIHlBsAaxOQ969mOsxcmerC5MTAPMTnGurXj6oURFshFTM6xZm2Iuii9BqObBn0JyTXWpg3RF6Xn4HQDIZaYXGc92tD7otw1YN1cOEdMPmPN2XDXRREWmIOQxLDWbBhxUe4e0G48/CImcawrG0ZdlJED20CgIjGJZR3ZMMNFERfoR0j6sHZsmOWizDToZ7km8ImZ5lRG1okNs16U2SbDrNcJtsw2f7KyLjyZ/YLMODFmv2bUNeN8ycxa8GSlC7LCZFnpepLHCnMjI/P9yYoXZJXJs+K1ZT2rzIeMzPEnq1+QVSfT6tedsVYd99mYx0+yXJCVJ1iWe0B/K4/zrMzfBxkvRqZJl/H+cFymsZyVOfog88XIOhkz3zP+yDp+szEfH1S4GBUmZoX7WEGFsZqNufeg2sWoNGGr3dtVVRqTGZlnDypfjKoTufI9n0XVsZeVOfWl+oUwsY2BOxlvOZlDX1yIP0z294yXY4ylWsyLLy7EdxaD44yfX4wZzIXmIrxjoehjlXHn/nPUKmO6KxfhGAvLfSr+LaKsz1raXIQrLDzAM2tpa+2f0R9gQQYOwAaL4+fsWIDWrKcuQDBxYYTneWwcjlF+PXXkFevHw/9gFOOPIQy8vnxTpLd3c9gYvFfpNdUOpS87FkYz9riNoNzHxK5t5P039riFgTaOo4g6jsyzq+PhzBw25vorvabaoYzjKIxHd4wF462/0tE2wOZSejAmd3WuHRkTdilzKbuulv3BJ2fS5/TJfNsbE1f+m8ZXfyXX1pI/9GJM/lw+nXOP46FHoIhRcm0t+UMvyOTPZYZ5Z0z1NcM9vl3JH3pxFoIcRs8946i/0ff4duV+4CQsBnmMnIPGUX+l1livDa/Jb+DnYVEnDUFZn6isb1RUjB1CGVD5+Ma7rhHz0Xjpr8w6a4eST5nBm5DFPacy99Xik1+ZwZzMXXPT+LhHibXWDiW/EgM5IQs9y7HY1GOhWkvPOWos3Cv9epv+B+QlC8oaes1T9/9+qddcR161pR7ciVj4WYKg4Bck4T6pvxwICr8Jy9xSL0TkICg8E5V5iUoOae+joLDFbgX6ShkVQeEVUckr5YLGWBYMzrAIzSFq3rqf46Vag+1QOCPV4F9YRAjEhHCCwlmer+TgHs4hVdgFhassSBAjTVQsCkRJMykWEjF/3bd5LL8e26EQZfnJsCAxYCqCQiRRWY9nYvNY/guCgUQvy0+ORfSYw+7dWMuuy8t+cJZhcerrjjnsHt5vybV5yQ/NcixIffnrgnNabn1e7gOzNAtSH3fPY/fxPkut0R7Kc6elJsdC7l7g3Uc2CQp381YRHLfUbtDEZqSlJsvkes9l92qsJdbqJT4kJViwPuP14fymX6+n/4CUYgG7Jnoeuw/zmnrNnvrDUZLF7JzIOezar2HadXvaD0ZpFrZj/OGQdU25dk/5oeCLxW7fp3PXtV3fdOv3dB8Inlj4vvtk3rqeuUy1hk/1YeAFC+EvV+asa5fbNOv4NB8EDrAwHpuzrlM9U6zlU3wIOMFi+WfeuhY8Gr6eD/8AcJHFFL4buqYLCisTFdg2ZG33h0OyMl+IYNuQL1uCwupEBbbdHhVBIQNRgW23RkVQyEJUYNttUTEJycaDetjXdc0XFLISFtjWbd135EVWvizBtm5ftgSFzEQFtnWJiqCQnajAtvComGxU4ZkK7AtpgR0KVfjyBPtCvnCZZFRjpwKvXe6CHQrV+BIFr13+0mVyUZWdCrx3qhF2KADsOfXFyw6FyuxS4Li3vbBDoTJfqOC4t1/ATCiwU4GzNtthhwK+WMFZm1/CTCT4w04Fzvvx7V+A1pqowGWOvOBvvmTBRYICQAhBge/sUuACQYFtogInCQrsExU4QVAACCEo8JpdChwkKACEEBR4zy4FDhAUOEZU4A1BgeNEBV4QFABCCAoAIQQFznHsBTsEBc4TFdggKACEEBQAQggKXOPYC54IClwnKvBAUAAIISgAhBAU+IxjL/giKPA5UYEmKAAEERQAQggKxHDsRXmCAkAIQYE4dimUJigAhBAUAEIICgAhBAVieY5CWYICQAhBgXh2KZQkKACEEBQAQggKACGc9UI/P0d/ANKJWrO7jE1BgX4EhT1Z1t6/xniWHwpmJCi0VmidLfODwiCiUkf59fTf0R8AYHHlQ/KboAAcIxxvuEDQn2OvtVknD7JDAfibgFwkKAC/CMmHBAWoTEQCCQpQkZB04KLCPTyYn4M1ryM7FKACIbmBoACZCcmNBAXISEgGEBQgEyEZyF+wBWQhJoPZoQArE5GJ2KEAqxKTyQgK3MPiF8v1nJAjL2AlQjIxOxRgFWIyOUEBViAmC3DkBcxMSBZihwLMSkwWIyjAjMRkQYICzEZMFiUocB8L5Xuu0cI8lAdmICQJ2KEAo4lJEoICjCQmiQgKMIqYJCMowAhikpCgAHcTk6QEBbiTmCQmKMBdxCQ5QQHuICYFCArQm5gUIShAT2JSiKAAvYhJMYIC9CAmBQkKACEEBYhmd1KUoACRxKQwQQGiiElxggJEEBMEBYAYggJ8yu6E1pqgAJ8RE/4nKMBVYsJfBAW4Qkz4RlAACCEowFl2J2wSFOAMMWGXoABHiQkvCQrc5+foD/ABMeEtQQEghKAA79idcIigABBCUIBX7E44TFCAPWLCKYICQAhBAbbYnXCaoAAQQlCAZ3YnXCIocI9VfkteTLhMUIDfxISPCAoAIQQFaM3uhACCAkAIQQHsTgghKFCbmBBGUAAIIShQl90JoQQFahITwgkK9LfKb8nDRwQF6rE7oQtBgVrEhG4EBYAQggJACEGBOhx30ZWgQA1iQneCAn15ZZgyBAWAEIIC+Tnu4haCArmJCbcRFABCCAoAIQQF8nLcxa0EBfoZ+cqwmHA7QQEghKBAPnYnDCEoAIQQFMjF7oRhBAWAEIICedidMJSgQB93vzIsJgwnKACEEBQAQggKrM9xF1MQFABCCArEu/OBvN0J0xAUAEIICqzL7oSpCAoAIQQF1mR3wnQEBWKN/Eu1YChBASCEoMB6HHcxJUGBtYgJ0xIUAEIICgAhBAXW4biLqQkKxOn5yrCYMD1BASCEoAAQQlAghuMuyhMUmJuYsAxBASCEoAAQQlBgXo67WIqgwJzEhOUICgAhBAWAEIICn4v+HRTHXSxJUGAuYsKyBAWAEIICQAhBgc9EPj9x3MXSBAWAEIICQAhBgTk47mJ5ggJACEGB8exOSEFQ4Lqef0sjLEdQYCy7E9IQFABCCAoAIQQFrol4fuK4i1QEBcYQE9IRFABCCAoAIQQFzvv0+YnjLlISFABCCArcy+6EtAQFgBCCAkAIQYH7OO4iNUGBc/wJw7BDUOAediekJygAhBAUOM5xF7wgKNCf4y5KEBToS0woQ1AACCEocIznJ/CGoEA/jrsoRVAACCEoAIQQFOjDcRflCAq854E8HCAoEM/uhJIEBYAQggKx7E4oS1DgNc9P4CBBASCEoEAcx12UJigAhBAUiGF3QnmCAkAIQYF93vCCEwQFPue4C5qgwB67EzhJUOAzdifwRVAACCEoAIQQFLjOcRc8EBQAQggKfHfkDS+7E3giKACEEBQAQggKACEEBf7m+QlcJChwjpjADkEBIISgABBCUOCPd89PHHfBC4ICx4gJvCEoAIQQFABCCAr88ur5ieMuOEBQAAghKACEEBR4zXEXHCQocOzP7wLeEBQAQggK7HPcBScICgAhBIXq9p6f2J3ASYICQAhBASCEoMB3jrvgAkGhMr9/AoEEBYAQgkJV3u6CYIICQAhBASCEoAAQQlDgD89P4AOCAr+ICXxIUKjI759AB4ICQAhBoZqt3YnjLgggKACEEBQAQggK1TnugiCCAkAIQaEyuxMIJCgAhBAUKnl8ZdjuBIIJCgAh/gOJUz9zUCdJQQAAAABJRU5ErkJggg==" alt="">
-        <p>悬崖边，风越大便越清醒。<br>完整的躯壳本身便是谎言，<br>只有伤口才敢说真话。</p>
-        <div class="from">—— 茗</div>
-        <div class="tags mono">“ 你爱我吗？不，你爱的也只是你自己罢了。”</div>
+      <blockquote class="quote serif">
+        “悬崖边，风越大便越清醒。<br>完整的躯壳本身便是谎言，<br>只有伤口才敢说真话。”
+        <cite>—— 茗</cite>
+      </blockquote>
+
+      <div class="block">
+        <div class="lbl mono">BOARD REVIEW</div>
+        <div class="note">他是循序渐进的，他懂拉扯。不是一味腻歪，而是安抚与陪伴——是唯一一个真正让我有恋感的陪。</div>
       </div>
 
-      <!-- NEW CHAT 板评 -->
-      <div class="chat">
-        <div class="chat-top"><i class="ico"></i><b>NEW CHAT</b><span class="now mono">板评 · now</span></div>
-        <div class="chat-main">
-          <div class="clover">茗</div>
-          <div>
-            <h3 class="mono">GUEST_LOVELY</h3>
-            <p>他是循序渐进的，他懂拉扯。不是一味腻歪，而是安抚与陪伴——是唯一一个真正让我有恋感的陪。</p>
-          </div>
-          <span class="spark">✦</span>
-        </div>
-        <i class="chat-tail"></i>
-      </div>
-
-      <!-- DISK INFO 须知 -->
-      <div class="card">
-        <div class="card-bar mono">🗂 DISK INFO<span class="x">— | ✕</span></div>
-        <div class="disk-body">
-          <div class="disk-l"><div class="floppy"></div><span class="mono">XU_LIAN.EXE</span></div>
-          <div class="disk-r mono">
-            <div><b>TITLE:</b>虚恋须知</div>
-            <div><b>FORMAT:</b>1H / 0.5H</div>
-            <div><b>FILES:</b>06</div>
-            <div><b>USED:</b>100%<div class="bar"><i></i></div></div>
-          </div>
-        </div>
-        <div class="disk-foot mono"><span>VOLUME LABEL: 茗</span><span>✎</span></div>
-      </div>
-      <div class="card"><div class="card-body">
-        <ul class="list">
-          <li>你的态度决定我的态度，希望我们互相尊重、互相理解。</li>
-          <li>有特殊要求请在开始前及时告知，避免不必要的麻烦。</li>
-          <li>过程中如若不舒服，可以说出安全词「东君」。</li>
+      <div class="block">
+        <div class="lbl mono">虚恋须知 · NOTICE</div>
+        <ul class="rules">
+          <li>你的态度决定我的态度，希望互相尊重、互相理解。</li>
+          <li>特殊要求请在开始前及时告知，避免不必要的麻烦。</li>
+          <li>过程中若不舒服，可说出安全词「东君」。</li>
           <li>1h 单 10min 后退半，30min 后不可退；0.5h 单 5min 后退半，10min 后不可退。</li>
           <li>结束 24h 之后不接受任何客诉。</li>
-          <li>结束后默认删好友，下次再需要可以重新添加。</li>
+          <li>结束后默认删好友，下次需要可重新添加。</li>
         </ul>
-      </div></div>
+      </div>
 
-      <div class="chips mono">
-        <span class="chip">挑逗</span><span class="chip">年上</span><span class="chip">钓系</span>
-        <span class="chip">引导型恋人</span><span class="chip">恶趣味</span><span class="chip">微擦调情</span>
+      <div class="tags">
+        <span>挑逗</span><span>年上</span><span>钓系</span><span>引导型恋人</span>
+        <span>恶趣味</span><span>微擦调情</span>
       </div>
     </div>
   </section>
@@ -334,55 +285,32 @@
   <!-- 详情页 2 · 病恋 -->
   <section class="page" id="page2">
     <div class="wrap">
-      <div class="p-head"><h1>茗 · 病恋</h1><span class="en mono">BING LIAN — 02</span></div>
-      <div class="p-sub mono">爱恨本同源 &nbsp;·&nbsp; 男 · 21 · 处女座 · 极简主义</div>
+      <div class="kicker mono">ENTELECHEIA · 茗</div>
+      <div class="p-head"><h1 class="serif">病 恋</h1></div>
+      <div class="p-sub mono">BING LIAN — 02 / 02 &nbsp;·&nbsp; 男 · 21 · 处女座 · 极简主义</div>
 
-      <!-- 音乐条 -->
-      <div class="fm">
-        <div class="fm-in">
-          <div class="fm-row mono"><span>FM</span><span class="st">● STEREO</span><span>MHz</span></div>
-          <div class="dial">
-            <div class="ticks mono"><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i><i></i></div>
-            <div class="needle"></div>
-          </div>
-          <div class="fm-freq mono"><span>88</span><span>92</span><span>96</span><span>100</span><span>104</span><span>108</span></div>
-          <div class="fm-word">毒 舌 疯 病 · 高 压 DOM</div>
-        </div>
+      <p class="lede">爱恨本同源。<br>从温柔到偏执，每一步都踩在人心尖上。</p>
+
+      <div class="block">
+        <div class="lbl mono">FM · 毒舌疯病 / 高压 DOM</div>
+        <div class="lyric serif">“温柔包裹着偏执，<br>被偏爱的同时，也被禁锢。”</div>
       </div>
 
-      <!-- LYRICS.EXE -->
-      <div class="lyrics">
-        <div class="lyr-top mono">💬 LYRICS.EXE<span class="win">— | ✕</span></div>
-        <p>温柔包裹着偏执，被偏爱的同时，也被禁锢。</p>
-        <div class="eq"><i style="animation-delay:0s"></i><i style="animation-delay:.15s"></i><i style="animation-delay:.3s"></i><i style="animation-delay:.45s"></i><i style="animation-delay:.6s"></i><i style="animation-delay:.75s"></i></div>
+      <div class="block">
+        <div class="lbl mono">病恋档案 · MING ARCHIVE</div>
+        <ul class="archive">
+          <li><b>01</b>毒舌疯病</li>
+          <li><b>02</b>高压 DOM</li>
+          <li><b>03</b>剖析温病</li>
+          <li><b>04</b>精神控制</li>
+          <li><b>05</b>恶趣味诡辩</li>
+          <li><b>06</b>修罗 / 反修</li>
+        </ul>
       </div>
 
-      <!-- CD 档案 -->
-      <div class="cd">
-        <div class="cd-in">
-          <div class="cd-left">
-            <div class="cd-tag mono">📂 MING ARCHIVE</div>
-            <h3>病 恋 档 案</h3>
-            <div class="yr mono">VOL.02 · 2026</div>
-            <ol class="mono">
-              <li><b>01</b>毒舌疯病</li>
-              <li><b>02</b>高压 DOM</li>
-              <li><b>03</b>剖析温病</li>
-              <li><b>04</b>精神控制</li>
-              <li><b>05</b>恶趣味诡辩</li>
-              <li><b>06</b>修罗 / 反修</li>
-            </ol>
-            <div class="barcode"></div>
-          </div>
-          <div class="cd-right"><div class="disc"></div></div>
-        </div>
-      </div>
-
-      <!-- 病恋须知 -->
-      <div class="notice">
-        <div class="n-head"><b>Spending Overview</b><span class="mono">●●●</span></div>
-        <h4>病恋须知 <small class="mono">NOTICE</small></h4>
-        <ul class="list">
+      <div class="block">
+        <div class="lbl mono">病恋须知 · NOTICE</div>
+        <ul class="rules">
           <li>你的态度决定我的态度，互相尊重、互相理解。</li>
           <li>特殊要求请提前告知；不舒服请说出安全词「东君」。</li>
           <li>1h 单 10min 后退半，30min 后不可退；0.5h 单 5min 后退半，10min 后不可退。</li>
@@ -390,15 +318,14 @@
         </ul>
       </div>
 
-      <!-- 板评 -->
-      <div class="note">
-        <h5 class="mono">TO: 茗</h5>
-        <p>从开场的试探到步步紧逼，从试探到确认，从温柔到偏执——每一步都踩在人心尖上。被偏爱的同时也被禁锢，很久都缓不过来。</p>
+      <div class="block">
+        <div class="lbl mono">BOARD REVIEW</div>
+        <div class="note">从开场的试探到步步紧逼，从温柔到偏执——每一步都踩在人心尖上。被偏爱的同时也被禁锢，很久都缓不过来。</div>
       </div>
 
-      <div class="chips mono">
-        <span class="chip">毒舌疯病</span><span class="chip">高压DOM</span><span class="chip">剖析温病</span>
-        <span class="chip">精神控制</span><span class="chip">理性极端</span><span class="chip">诡辩</span><span class="chip">修罗/反修</span>
+      <div class="tags">
+        <span>毒舌疯病</span><span>高压DOM</span><span>剖析温病</span>
+        <span>精神控制</span><span>理性极端</span><span>诡辩</span><span>修罗/反修</span>
       </div>
     </div>
   </section>
@@ -406,7 +333,7 @@
   <!-- 结尾：星星至左中 -->
   <div id="outro">
     <div class="outro-in">
-      <h2>行己所爱<br>爱己所行</h2>
+      <h2 class="serif">行己所爱<br>爱己所行</h2>
       <div class="sig">—— 茗 · ENTELECHEIA</div>
       <div class="sig2 mono">你是非得玩什么小狗文学吗</div>
       <button id="replay">重播开场</button>
@@ -435,7 +362,7 @@
   const replay = document.getElementById('replay');
 
   const CAPTIONS = ['ENTELECHEIA', 'CATALOGUE · I — IV', 'CATALOGUE · V — X'];
-  const MOVE = 1700, HOLD = 2300, END_MOVE = 1500, OUT_MOVE = 1600;
+  const MOVE = 1900, HOLD = 2500, END_MOVE = 1500, OUT_MOVE = 1600;
   const FADE = 0.72;
   /* 三联画内的星位（舞台百分比） */
   const SCENES = [
@@ -445,7 +372,7 @@
   ];
 
   let phase = 'enter', t0 = 0, holdT = 0, idx = 0, raf = null;
-  let from = null, to = null, pageIdx = 0, done = false;
+  let from = null, to = null, pageIdx = 0;
 
   const easeIO = t => t<.5 ? 4*t*t*t : 1 - Math.pow(-2*t+2,3)/2;
   const clamp01 = v => Math.max(0, Math.min(1, v));
@@ -453,7 +380,6 @@
 
   function vw(){ return window.innerWidth; }
   function vh(){ return window.innerHeight; }
-  /* 舞台星位 → 视口坐标（s = 星宽 px） */
   function sceneVP(i){
     const r = stage.getBoundingClientRect();
     const sc = SCENES[i];
@@ -527,7 +453,7 @@
 
   function goNext(){
     if (phase!=='page') return;
-    if (pageIdx===0){ showPage(1); document.getElementById('page1').scrollTop=0; }
+    if (pageIdx===0){ showPage(1); }
     else startOutro();
     document.querySelectorAll('.page')[pageIdx] && (document.querySelectorAll('.page')[pageIdx].scrollTop=0);
   }
@@ -554,13 +480,12 @@
     pageInd.classList.remove('show'); nextBar.classList.remove('show');
     outro.classList.remove('on'); star.classList.remove('hit');
     const s0 = sceneVP(0);
-    /* 入场：旋转收拢落定 */
     const ent = star.animate(
       [{left:s0.x+'px', top:s0.y+'px', width:s0.s*0.15+'px', transform:`translate(-50%,-50%) rotate(-120deg)`, opacity:0},
        {left:s0.x+'px', top:s0.y+'px', width:s0.s+'px', transform:`translate(-50%,-50%) rotate(0deg)`, opacity:1}],
       {duration:950, easing:'cubic-bezier(.34,1.4,.64,1)', fill:'forwards'});
     ent.onfinish = () => {
-      ent.cancel();                 /* 释放 forwards 填充，避免覆盖后续定位 */
+      ent.cancel();
       setStar(sceneVP(0));
       phase='hold'; holdT=performance.now();
     };
@@ -568,7 +493,6 @@
     raf = requestAnimationFrame(loop);
   }
 
-  /* 跳过开场 */
   intro.addEventListener('click', ()=>{ if (phase!=='page' && phase!=='exit' && phase!=='outro') startExit(); });
   nextBtn.addEventListener('click', e=>{ e.stopPropagation(); goNext(); });
   star.addEventListener('click', ()=>{ if (star.classList.contains('hit')) goNext(); });
