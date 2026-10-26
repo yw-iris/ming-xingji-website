@@ -478,9 +478,11 @@
   .cd-tracks li.ck .ckbox{background:var(--ink); color:var(--card)}
   .cd-tracks li.ck .ckbox::after{content:"✓"}
   .cd-hint{
-    margin:11px 18px 0; font-family:var(--mono); font-size:9.5px;
-    letter-spacing:.16em; color:var(--muted);
+    margin:13px 18px 0; font-family:var(--mono); font-size:12px;
+    font-weight:700; letter-spacing:.14em; color:var(--ink);
+    display:flex; align-items:center; gap:8px;
   }
+  .cd-hint::before{content:""; width:7px; height:7px; background:var(--ink); flex-shrink:0}
   /* 茗·念白：随勾选数逐条出现 */
   #page2 .gift-row{display:none}
   #page2 .gift-row.reveal{display:flex; animation:scIn .55s cubic-bezier(.22,.8,.36,1) both}
@@ -648,7 +650,7 @@
         <div class="stories-card">
           <div class="sc-head"><b>Stories</b><span>See all</span></div>
           <div class="story-row">
-            <div class="story"><span class="ring solid" id="addBtn">+</span><i>点击添加风格</i></div>
+            <div class="story"><span class="ring solid" id="addBtn">+</span><i>点击添加风格解锁结局</i></div>
             <div class="story"><span class="ring">趣</span><i>恶趣味</i></div>
             <div class="story"><span class="ring">引</span><i>引导型恋人</i></div>
             <div class="story"><span class="ring">钓</span><i>年上钓系</i></div>
