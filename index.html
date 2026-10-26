@@ -853,17 +853,18 @@
 
   function vw(){ return window.innerWidth; }
   function vh(){ return window.innerHeight; }
-  function centerVP(){ return {x: vw()*0.50, y: vh()*0.46, s: Math.min(vw()*0.34, 196), r: 0}; }
-  function cornerVP(){
-    // 开场落点：手机端星星落在封面 “MING” 中 N 的左上角；桌面端在页面左上角
+  function bigSize(){ return Math.min(vw()*0.34, 196); }
+  function centerVP(){ return {x: vw()*0.50, y: vh()*0.46, s: bigSize(), r: 0}; }
+  // 开场初始位置：手机端大星星一开始就停在封面 “MING” 的 N 左上角；桌面端在屏幕中心
+  function openStartVP(){
     if (window.innerWidth <= 520){
       const n = document.getElementById('nChar');
       if (n){
         const r = n.getBoundingClientRect();
-        return {x: r.left, y: r.top, s: Math.max(22, r.height*0.26), r: 0};
+        return {x: r.left, y: r.top, s: bigSize(), r: 0};
       }
     }
-    return {x: vw()*0.105, y: vh()*0.072, s: 30, r: 0};
+    return centerVP();
   }
   // 里页里星星的停靠点：始终在页面左上角
   function pageCornerVP(){ return {x: vw()*0.105, y: vh()*0.072, s: 30, r: 0}; }
@@ -889,13 +890,17 @@
   function loop(now){
     if (phase==='hold'){
       if (now-holdT >= HOLD){
-        phase='fly'; t0=performance.now();
-        from = centerVP(); to = cornerVP();
+        // 手机端：大星星初始就停在 N 左上角，无需飞落，hold 结束直接进里页
+        if (window.innerWidth <= 520 && document.getElementById('nChar')){
+          phase='page'; showPage(0);
+        } else {
+          phase='fly'; t0=performance.now();
+          from = centerVP(); to = pageCornerVP();
+        }
       }
     } else if (phase==='fly'){
       const p = clamp01((now-t0)/FLY_MOVE);
       const e = easeIO(p);
-      // 开场：星星保持大尺寸飞到 N 左上角（到达时仍是大的），缩小的动作留给进里页
       setStar({x:lerp(from.x,to.x,e), y:lerp(from.y,to.y,e), s: from.s, r: lerp(from.r,to.r,e)});
       if (p>=1){ phase='page'; showPage(0); }
     } else if (phase==='flyout'){
@@ -961,7 +966,7 @@
     outro.classList.remove('on'); star.classList.remove('hit');
     cover.classList.remove('off');
     document.body.classList.remove('in-pages');
-    const c = centerVP();
+    const c = openStartVP();
     star.style.opacity = '0';
     const ent = star.animate(
       [{left:c.x+'px', top:c.y+'px', width:(c.s*0.18)+'px', opacity:0, transform:'translate(-50%,-50%) rotate(-90deg)'},
@@ -977,9 +982,13 @@
     raf = requestAnimationFrame(loop);
   }
 
-  // 开场可点击画面直接落位左上角
+  // 开场可点击画面直接进里页（大星星已在 N 角，直接移到页面左上角）
   document.addEventListener('click', () => {
-    if (phase==='enter' || phase==='hold'){ phase='fly'; t0=performance.now(); from=centerVP(); to=cornerVP(); }
+    if (phase==='enter' || phase==='hold'){
+      setStar(openStartVP()); star.style.opacity = '1';
+      if (star.getAnimations) star.getAnimations().forEach(x=>x.cancel());
+      phase='page'; showPage(0);
+    }
   });
   nextBtn.addEventListener('click', e=>{ e.stopPropagation(); goNext(); });
   prevBtn.addEventListener('click', e=>{ e.stopPropagation(); goPrev(); });
