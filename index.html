@@ -279,6 +279,12 @@
     flex-shrink:0;
   }
   .ring.solid{background:var(--ink); color:var(--card); border-color:var(--ink); font-size:22px; font-family:var(--sans); font-weight:300}
+  /* 点单入口：点加号逐个点亮，全部点亮后加号消失 */
+  .ring{transition:background .35s ease, color .35s ease, transform .35s ease, opacity .35s ease}
+  #addBtn{cursor:pointer; -webkit-tap-highlight-color:transparent}
+  #addBtn:active{transform:scale(.9)}
+  .ring.on{background:var(--ink); color:var(--card); border-color:var(--ink)}
+  .ring.gone{opacity:0; transform:scale(.4); pointer-events:none}
   .story i{font-style:normal; font-size:10.5px; color:var(--muted); letter-spacing:.04em; white-space:nowrap}
   .sc-post{
     margin-top:18px; border:1px solid var(--line); border-radius:16px;
@@ -611,7 +617,7 @@
         <div class="stories-card">
           <div class="sc-head"><b>Stories</b><span>See all</span></div>
           <div class="story-row">
-            <div class="story"><span class="ring solid">+</span><i>点单入口</i></div>
+            <div class="story"><span class="ring solid" id="addBtn">+</span><i>点单入口</i></div>
             <div class="story"><span class="ring">趣</span><i>恶趣味</i></div>
             <div class="story"><span class="ring">引</span><i>引导型恋人</i></div>
             <div class="story"><span class="ring">钓</span><i>年上钓系</i></div>
@@ -990,6 +996,22 @@
     else if (e.key==='ArrowLeft'){ e.preventDefault(); goPrev(); }
   });
   replay.addEventListener('click', e=>{ e.stopPropagation(); start(); });
+
+  // Stories 点单入口：每点一次加号点亮一个圈，全部点亮后加号消失
+  const addBtn = document.getElementById('addBtn');
+  if (addBtn){
+    addBtn.addEventListener('click', e=>{
+      e.stopPropagation();
+      if (addBtn.classList.contains('gone')) return;
+      const row = addBtn.closest('.story-row');
+      const rings = [...row.querySelectorAll('.ring')].filter(r => r !== addBtn);
+      const next = rings.find(r => !r.classList.contains('on'));
+      if (next){
+        next.classList.add('on');
+        if (!rings.some(r => !r.classList.contains('on'))) addBtn.classList.add('gone');
+      }
+    });
+  }
 
   start();
 })();
