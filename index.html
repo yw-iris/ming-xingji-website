@@ -332,14 +332,21 @@
 
   /* ============ 素材③ · DISK INFO 窗口 ============ */
   .disk{
-    border:1.5px solid var(--ink); border-radius:12px; background:var(--card);
-    overflow:hidden;
+    border-radius:28px; background:var(--card);
+    box-shadow:0 12px 28px rgba(21,24,29,.10), 0 2px 6px rgba(21,24,29,.06);
   }
   .disk-bar{
-    display:flex; align-items:center; gap:8px;
-    padding:9px 12px; border-bottom:1.5px solid var(--ink);
+    position:relative; display:flex; align-items:center; gap:8px;
+    padding:9px 12px; border-bottom:1.5px dashed var(--line-2);
     font-family:var(--mono); font-size:12px; letter-spacing:.24em; font-weight:700;
   }
+  .disk-bar::before,.disk-bar::after{   /* 票券两侧半圆缺口 */
+    content:""; position:absolute; bottom:-9px;
+    width:18px;height:18px; border-radius:50%; background:var(--bg);
+    box-shadow:inset 0 1px 2px rgba(21,24,29,.08);
+  }
+  .disk-bar::before{left:-9px}
+  .disk-bar::after{right:-9px}
   .disk-bar .x{
     margin-left:auto; width:18px;height:18px; border:1.5px solid var(--ink); border-radius:4px;
     display:flex; align-items:center; justify-content:center; font-size:10px; font-weight:400;
@@ -466,24 +473,6 @@
   .note{
     border:1px solid var(--line); border-radius:18px; background:var(--card);
     padding:24px 26px; font-size:14.5px; line-height:2; letter-spacing:.03em; color:var(--ink);
-  }
-  /* 虚恋页 · 票券风引言框（超大圆角 + 两侧半圆缺口 + 深色胶囊标签） */
-  .note.ticket{
-    position:relative; border:none; border-radius:28px; padding:22px 26px 24px;
-    box-shadow:0 12px 28px rgba(21,24,29,.10), 0 2px 6px rgba(21,24,29,.06);
-  }
-  .note.ticket::before,.note.ticket::after{
-    content:""; position:absolute; top:50%; transform:translateY(-50%);
-    width:18px;height:18px; border-radius:50%; background:var(--bg);
-    box-shadow:inset 0 1px 2px rgba(21,24,29,.08);
-  }
-  .note.ticket::before{left:-9px}
-  .note.ticket::after{right:-9px}
-  .note-tag{
-    display:inline-flex; align-items:center; gap:8px;
-    background:var(--ink); color:#f4f6f8; border-radius:99px;
-    font-family:var(--mono); font-size:9.5px; letter-spacing:.22em;
-    padding:5px 12px; margin-bottom:14px;
   }
 
   /* ============ 底部翻页 & 页码 ============ */
@@ -622,8 +611,7 @@
       <div class="gift-row"><b>003</b><span class="name">伤口的真话</span><em class="sc">true words</em><span class="tag">茗 · 念白</span></div>
       <div class="gift-row"><b>004</b><span class="name">唯一的恋感</span><em class="sc">only love</em><span class="tag">茗 · 念白</span></div>
 
-      <blockquote class="note ticket serif" style="margin-top:26px">
-        <span class="note-tag">QUOTE · 念白</span><br>
+      <blockquote class="note serif" style="margin-top:26px; border-radius:4px">
         “悬崖边，风越大便越清醒。<br>完整的躯壳本身便是谎言，<br>只有伤口才敢说真话。”
       </blockquote>
 
