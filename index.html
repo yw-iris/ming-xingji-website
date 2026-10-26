@@ -285,6 +285,13 @@
   #addBtn:active{transform:scale(.9)}
   .ring.on{background:var(--ink); color:var(--card); border-color:var(--ink)}
   .ring.gone{opacity:0; transform:scale(.4); pointer-events:none}
+  /* 全部点亮后：整个“点单入口”项收起，后面的圈滑上来补位 */
+  .story.add-gone{
+    max-width:0; min-width:0; padding:0; opacity:0; overflow:hidden;
+    margin-right:-18px;               /* 抵消 story-row 的 gap，收起后间距与其余项一致 */
+    pointer-events:none;
+    transition:max-width .5s ease .15s, margin-right .5s ease .15s, opacity .4s ease;
+  }
   .story i{font-style:normal; font-size:10.5px; color:var(--muted); letter-spacing:.04em; white-space:nowrap}
   .sc-post{
     margin-top:18px; border:1px solid var(--line); border-radius:16px;
@@ -1008,7 +1015,10 @@
       const next = rings.find(r => !r.classList.contains('on'));
       if (next){
         next.classList.add('on');
-        if (!rings.some(r => !r.classList.contains('on'))) addBtn.classList.add('gone');
+        if (!rings.some(r => !r.classList.contains('on'))){
+          addBtn.classList.add('gone');
+          addBtn.closest('.story').classList.add('add-gone');   // 整项收起，后面圈滑上来
+        }
       }
     });
   }
