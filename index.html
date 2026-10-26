@@ -483,6 +483,15 @@
     font-family:var(--mono); font-style:normal; font-size:8.5px; letter-spacing:.1em;
     padding:3px 5px;
   }
+  /* 黑胶唱片（病恋页） */
+  .disc-black{
+    background:conic-gradient(from 20deg,#1b1e23,#3a3f47,#0f1115,#2a2e34,#15181d,#33383f,#1b1e23);
+    box-shadow:inset 0 0 0 1px rgba(255,255,255,.16), 0 4px 14px rgba(21,24,29,.45);
+  }
+  .disc-black::before{
+    background:#0f1115; border:1px solid rgba(255,255,255,.28);
+    box-shadow:0 0 0 5px rgba(255,255,255,.12);
+  }
 
   .note{
     border:1px solid var(--line); border-radius:18px; background:var(--card);
@@ -568,8 +577,8 @@
       <span class="badge">#TIME: 2023-2026</span>
     </div>
 
-    <div class="stage">
-      <div class="cover-word">MING</div>
+      <div class="stage">
+        <div class="cover-word">MI<span id="nChar">N</span>G</div>
       <div class="reflect-wrap">
         <div class="waterline"></div>
         <div class="reflect" aria-hidden="true">MING</div>
@@ -795,7 +804,7 @@
             </div>
           </div>
           <div class="cd-disc-side">
-            <span class="disc"></span>
+            <span class="disc disc-black"></span>
             <i>DA<br>//001</i>
           </div>
         </div>
@@ -881,7 +890,17 @@
   function vw(){ return window.innerWidth; }
   function vh(){ return window.innerHeight; }
   function centerVP(){ return {x: vw()*0.50, y: vh()*0.46, s: Math.min(vw()*0.34, 196), r: 0}; }
-  function cornerVP(){ return {x: vw()*0.105, y: vh()*0.072, s: 30, r: 0}; }
+  function cornerVP(){
+    // 手机端：星星落在封面 “MING” 中 N 的左上角
+    if (window.innerWidth <= 520){
+      const n = document.getElementById('nChar');
+      if (n){
+        const r = n.getBoundingClientRect();
+        return {x: r.left, y: r.top, s: Math.max(22, r.height*0.26), r: 0};
+      }
+    }
+    return {x: vw()*0.105, y: vh()*0.072, s: 30, r: 0};
+  }
   function leftmidVP(){ return {x: vw()*0.24, y: vh()*0.42, s: Math.min(vw()*0.16, 92), r: 0}; }
 
   function setStar(p){
