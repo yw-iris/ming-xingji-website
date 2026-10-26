@@ -464,6 +464,26 @@
   }
   .cd-tracks li b{font-weight:400; color:var(--faint); min-width:22px}
   .cd-tracks li span{color:var(--muted); margin-left:auto; font-size:10px}
+  /* 曲目打勾：点击行切换勾选，勾选数解锁茗的念白 */
+  .cd-tracks li{cursor:pointer; -webkit-tap-highlight-color:transparent; transition:opacity .3s ease}
+  .cd-tracks li.ck{opacity:.5}
+  .ckbox{
+    width:15px; height:15px; border:1.5px solid var(--ink); flex-shrink:0;
+    align-self:center; margin-left:10px;
+    display:flex; align-items:center; justify-content:center;
+    font-size:10px; line-height:1; color:transparent;
+    transition:background .25s ease, color .25s ease;
+  }
+  .cd-tracks li span.ckbox{margin-left:10px; flex-shrink:0}
+  .cd-tracks li.ck .ckbox{background:var(--ink); color:var(--card)}
+  .cd-tracks li.ck .ckbox::after{content:"✓"}
+  .cd-hint{
+    margin:11px 18px 0; font-family:var(--mono); font-size:9.5px;
+    letter-spacing:.16em; color:var(--muted);
+  }
+  /* 茗·念白：随勾选数逐条出现 */
+  #page2 .gift-row{display:none}
+  #page2 .gift-row.reveal{display:flex; animation:scIn .55s cubic-bezier(.22,.8,.36,1) both}
   .cd-foot{display:flex; align-items:center; gap:12px; margin:14px 18px 0}
   .barcode{
     height:26px; flex:1; max-width:150px;
@@ -767,13 +787,14 @@
               <small>病恋档案 · SIDE A</small>
             </div>
             <ul class="cd-tracks">
-              <li><b>01</b>毒舌疯病<span>3:47</span></li>
-              <li><b>02</b>高压 DOM<span>4:02</span></li>
-              <li><b>03</b>剖析温病<span>3:15</span></li>
-              <li><b>04</b>精神控制<span>5:24</span></li>
-              <li><b>05</b>恶趣味诡辩<span>3:58</span></li>
-              <li><b>06</b>修罗 / 反修<span>4:41</span></li>
+              <li><b>01</b>毒舌疯病<span>3:47</span><span class="ckbox"></span></li>
+              <li><b>02</b>高压 DOM<span>4:02</span><span class="ckbox"></span></li>
+              <li><b>03</b>剖析温病<span>3:15</span><span class="ckbox"></span></li>
+              <li><b>04</b>精神控制<span>5:24</span><span class="ckbox"></span></li>
+              <li><b>05</b>恶趣味诡辩<span>3:58</span><span class="ckbox"></span></li>
+              <li><b>06</b>修罗 / 反修<span>4:41</span><span class="ckbox"></span></li>
             </ul>
+            <div class="cd-hint">☑ 勾选曲目 · 解锁茗的念白</div>
             <div class="cd-foot">
               <span class="barcode"></span>
               <span class="cd-sticker">MA //001</span>
@@ -1007,6 +1028,21 @@
     else if (e.key==='ArrowLeft'){ e.preventDefault(); goPrev(); }
   });
   replay.addEventListener('click', e=>{ e.stopPropagation(); start(); });
+
+  // 病恋页 · 勾选曲目解锁茗的念白（勾选数达到 1/2/3/4 逐条出现）
+  const ckTracks = document.querySelectorAll('#page2 .cd-tracks li');
+  const p2Quotes = document.querySelectorAll('#page2 .gift-row');
+  ckTracks.forEach(li => {
+    li.addEventListener('click', e => {
+      e.stopPropagation();
+      li.classList.toggle('ck');
+      const n = document.querySelectorAll('#page2 .cd-tracks li.ck').length;
+      p2Quotes.forEach((q, i) => {
+        if (i < n) q.classList.add('reveal');
+        else q.classList.remove('reveal');
+      });
+    });
+  });
 
   // Stories 点单入口：每点一次加号点亮一个圈，全部点亮后加号消失
   const addBtn = document.getElementById('addBtn');
