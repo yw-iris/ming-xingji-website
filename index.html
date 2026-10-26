@@ -486,6 +486,17 @@
   /* 茗·念白：随勾选数逐条出现 */
   #page2 .gift-row{display:none}
   #page2 .gift-row.reveal{display:flex; animation:scIn .55s cubic-bezier(.22,.8,.36,1) both}
+  /* 解锁提示气泡 */
+  .unlock-toast{
+    position:fixed; left:50%; bottom:86px; transform:translateX(-50%) translateY(14px);
+    background:var(--ink); color:#f4f6f8; font-family:var(--mono); font-size:11.5px;
+    letter-spacing:.2em; padding:11px 20px; border-radius:99px; white-space:nowrap;
+    box-shadow:0 10px 26px rgba(21,24,29,.3);
+    opacity:0; pointer-events:none; z-index:80;
+    transition:opacity .35s ease, transform .35s ease;
+  }
+  .unlock-toast.show{opacity:1; transform:translateX(-50%) translateY(0)}
+  .unlock-toast em{font-style:normal; color:#fff; border-bottom:1px solid rgba(255,255,255,.55); padding-bottom:1px}
   .cd-foot{display:flex; align-items:center; gap:12px; margin:14px 18px 0}
   .barcode{
     height:26px; flex:1; max-width:150px;
@@ -1031,17 +1042,22 @@
   });
   replay.addEventListener('click', e=>{ e.stopPropagation(); start(); });
 
-  // 病恋页 · 勾选曲目解锁茗的念白（勾选数达到 1/2/3/4 逐条出现）
+  // 病恋页 · 勾选曲目解锁茗的念白（勾选数达到 1/2/3/4 逐条出现，解锁时弹提示）
   const ckTracks = document.querySelectorAll('#page2 .cd-tracks li');
   const p2Quotes = document.querySelectorAll('#page2 .gift-row');
+  const quoteNames = [...p2Quotes].map(q => (q.querySelector('.name') || {}).textContent || '');
   ckTracks.forEach(li => {
     li.addEventListener('click', e => {
       e.stopPropagation();
       li.classList.toggle('ck');
       const n = document.querySelectorAll('#page2 .cd-tracks li.ck').length;
       p2Quotes.forEach((q, i) => {
-        if (i < n) q.classList.add('reveal');
-        else q.classList.remove('reveal');
+        if (i < n){
+          if (!q.classList.contains('reveal')){
+            q.classList.add('reveal');
+            showToast(`已解锁 · <em>${quoteNames[i]}</em>`);   // 新解锁弹提示
+          }
+        } else q.classList.remove('reveal');
       });
     });
   });
@@ -1072,6 +1088,18 @@
 
   start();
 })();
+
+  // 解锁提示气泡
+  let toastTimer = null;
+  function showToast(html){
+    const t = document.getElementById('ckToast');
+    if (!t) return;
+    t.innerHTML = html;
+    t.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => t.classList.remove('show'), 2000);
+  }
 </script>
+  <div class="unlock-toast" id="ckToast"></div>
 </body>
 </html>
