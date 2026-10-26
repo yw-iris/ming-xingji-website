@@ -894,8 +894,9 @@
       }
     } else if (phase==='fly'){
       const p = clamp01((now-t0)/FLY_MOVE);
-      const e = easeIO(p);
-      setStar({x:lerp(from.x,to.x,e), y:lerp(from.y,to.y,e), s:lerp(from.s,to.s,e), r:lerp(from.r,to.r,e)});
+      const ePos = easeIO(p);
+      const eSize = easeIO(clamp01(p/0.6));   // 大小先收缩（前60%），到达N角时已变小
+      setStar({x:lerp(from.x,to.x,ePos), y:lerp(from.y,to.y,ePos), s:lerp(from.s,to.s,eSize), r:lerp(from.r,to.r,ePos)});
       if (p>=1){ phase='page'; showPage(0); }
     } else if (phase==='flyout'){
       const p = clamp01((now-t0)/OUT_MOVE);
